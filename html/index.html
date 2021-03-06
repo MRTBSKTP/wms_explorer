@@ -9,7 +9,6 @@
 
         <link rel="stylesheet" href="../styles/index.css">
         <script src="../script/index.js" defer></script>
-        <script src="../script/web_map.js" defer></script>
 
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -19,6 +18,7 @@
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
 
+        <script src="../script/web_map.js" defer></script>
     </head>
     <body>
         <header>
@@ -26,17 +26,17 @@
             <div id="query_area">
                 <div id="header_flex_container">
                     <input type="url" id="service_url" name="service_url" size="60" placeholder="Servis URL://" value="https://servis.atlas.gov.tr/ATLASSIUMAPISERVICES/api/AtlasService/GetGeographicServiceResult/1700?SERVICE=WMS&request=GetCapabilities">
-                    <button id="fire_request">GetCapabilities Sorgula</button>
+                    <button id="fire_request">GetCapabilities</button>
                 </div>
             </div>
         </header>
         <main>
-            <div id="map"></div>
+            <div id="map" class="ready"></div>
         </main>
         <aside>
-            <h2>GetCapabilities Sonuçları</h2>
+            <h2>GetCapabilities Yanıtı</h2>
             <section id="service_tag">
-                <table id="service">
+                <table id="service" class="ready">
                     <caption>Servis Detayları</caption>
                     <tr>
                         <th scope="row"><b>Başlık</b></th>
@@ -69,25 +69,18 @@
                     <li>İstem Tipleri</li>
                     <li>Katmanlar</li>
                 </ul>
-                <div id="capabilities_list_view_container" class="unready">
-                    <ul id="requests" class="capabilities_list_view_detail"></ul>
-                    <ul id="layers" class="capabilities_list_view_detail"></ul>
+                <div id="capabilities_list_view_container">
+                    <div class="list_wrapper">
+                        <ul id="requests" class="capabilities_list_view_detail" slide=""></ul>
+                    </div>
+                    <div class="list_wrapper">
+                        <ul id="layers" class="capabilities_list_view_detail" slide=""></ul>
+                    </div>
                 </div>                    
             </section>
         </aside>
         <footer>
             <p>Mert BEŞİKTEPE 2021</p>
         </footer>
-
-        <script>            
-            // For mockup purposes will use node module approach...
-            let map = L.map('map').setView([51.50, -0.09], 13);
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-        </script>
-
-
     </body>
 </html>

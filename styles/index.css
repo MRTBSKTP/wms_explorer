@@ -189,7 +189,6 @@ td, th {
 
 td {
     text-align: left;
-    background-color: #a4bbbe;
     /*color: rgb(3, 87, 3);*/
     color: #242124; /* raisin black */
     background-color: gainsboro;
@@ -256,16 +255,37 @@ caption {
     justify-content: space-around;
 }
 
-#capabilities_list_view_container > ul {
-    padding: 0;
+.list_wrapper {
     flex: 1;
-    list-style: none;
     margin: 0;
-    max-height: 413px;
-    overflow-x: auto;
+    padding: 0;
+    max-height: 57vh;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    position: relative;
+    background-color: #172A3A;
 }
 
-#capabilities_list_view_container li {
+.capabilities_list_view_detail {
+    position: relative;
+    left: 101%;
+    top: 0;
+    padding: 0;
+    list-style: none;
+    margin: 0;
+    transition-property: left;
+    transition-duration: 0.5s;   
+}
+
+.capabilities_list_view_detail[slide="in"] {
+    left: 0%;
+}
+
+.capabilities_list_view_detail[slide="out"] {
+    left: -101%;
+}
+
+.capabilities_list_view_detail li {
     border: 1px solid #172A3A;
     background-color: gainsboro;
     padding-left: 5px;
