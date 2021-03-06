@@ -211,27 +211,25 @@ function fillList(listElement, dataArray) {
 */
 function delegateToChild(event) {
 
-    console.log(event.target.id);
-    console.log(event.target.tagName);
-
     // Further delegate to next callback for process based on target element
-    switch (event.target.parentNode.id) {
-        case "requests":
-            let requestDetail = getRequestDetails(event.target.textContent, event.target.parentNode);
-            break;
-        case "layers":
-            let layerDetail = getLayerDetails(event.target.textContent, event.target.parentNode);
-            break;
-        default:
-            // if neither true:
-            break;
+    if (event.target.parentNode.className = 'capabilities_list_view_detail') {
+        switch (event.target.parentNode.id) {
+            case "requests":
+                let _requestDetail = getRequestDetails(event.target.textContent, event.target.parentNode);
+                break;
+            case "layers":
+                let _layerDetail = getLayerDetails(event.target.textContent, event.target.parentNode);
+                break;
+            default:
+                // if neither true:
+                break;
+        }
+        
+        // Hide the ul element
+        event.target.parentNode.setAttribute('slide','out');
+        // Hide scrollbar of list wrapper
+        event.target.parentNode.parentNode.style.overflowY = 'hidden';
     }
-    // Hide the parent ul element
-
-    // event.target.parentNode.className = 'sendback';
-    // setTimeout(function() {
-    //     event.target.parentNode.style.zIndex = -1;
-    // }, 200);
 }
 
 /*

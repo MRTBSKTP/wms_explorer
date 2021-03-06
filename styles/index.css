@@ -296,6 +296,11 @@ caption {
     color: #343434; /* Jet Black */
 }
 
+.capabilities_list_view_detail li:hover {
+    background-color: #014f53;
+    color: aliceblue;
+}
+
 /* Animations */
 
 .unready {
