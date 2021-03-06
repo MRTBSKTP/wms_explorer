@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="tr">
+    <head>
+        <title>WMS Explorer</title>
+        <meta charset="utf-8">
+        <meta name="author" content="Mert Beşiktepe">
+        <meta name="description" content="Bu sayfa ile WMS'lere ait URL'leri kullanarak GetCapabilities dökümanında listelenen servisle ilgili önemli bilgileri incelyebilirsiniz">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="../styles/index.css">
+        <script src="../script/index.js" defer></script>
+        <script src="../script/web_map.js" defer></script>
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin=""/>
+
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+    </head>
+    <body>
+        <header>
+            <h1>WMS Explorer</h1>
+            <div id="query_area">
+                <div id="header_flex_container">
+                    <input type="url" id="service_url" name="service_url" size="60" placeholder="Servis URL://" value="https://servis.atlas.gov.tr/ATLASSIUMAPISERVICES/api/AtlasService/GetGeographicServiceResult/1700?SERVICE=WMS&request=GetCapabilities">
+                    <button id="fire_request">GetCapabilities Sorgula</button>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div id="map"></div>
+        </main>
+        <aside>
+            <h2>GetCapabilities Sonuçları</h2>
+            <section id="service_tag">
+                <table id="service">
+                    <caption>Servis Detayları</caption>
+                    <tr>
+                        <th scope="row"><b>Başlık</b></th>
+                        <td id="title"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><b>WMS Versiyon</b></th>
+                        <td id="version"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><b>İlgili Kişi</b></th>
+                        <td id="contact_person"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><b>İlgili Kurum</b></th>
+                        <td id="contact_org"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><b>Erişim Kısıtlaması</b></th>
+                        <td id="constraints"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><b>Ücretler</b></th>
+                        <td id="fees"></td>
+                    </tr>
+                </table>
+            </section>
+            <section id="capabilities_tag">
+                <ul id="capabilities_list_view_header" class="ready">
+                    <li>İstem Tipleri</li>
+                    <li>Katmanlar</li>
+                </ul>
+                <div id="capabilities_list_view_container" class="unready">
+                    <ul id="requests" class="capabilities_list_view_detail"></ul>
+                    <ul id="layers" class="capabilities_list_view_detail"></ul>
+                </div>                    
+            </section>
+        </aside>
+        <footer>
+            <p>Mert BEŞİKTEPE 2021</p>
+        </footer>
+
+        <script>            
+            // For mockup purposes will use node module approach...
+            let map = L.map('map').setView([51.50, -0.09], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+        </script>
+
+
+    </body>
+</html>

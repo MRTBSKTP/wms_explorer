@@ -1,0 +1,294 @@
+/*
+    This stylesheet is made up of 3 major parts,
+        1- Page Skeleton:  Page level arrangements of elements and their in-element 
+                           display types
+        2- Container Spec: Controls how containers to specific functionality should
+                           be styled
+        3- Table Styling:  Styling to apply table elements
+*/
+
+/* 
+    Fonts 
+*/
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
+
+/* 
+    Page Skeleton
+*/
+
+/* A small normalization */
+html {
+    font-size: 16px;
+    font-family: sans-serif;
+}
+
+* * {
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    height: 110vh; /* pushes footer out of the page */
+    margin: 0;
+    display: grid;
+    grid-template-areas: 
+            "header aside"
+            "map aside"
+            "footer footer";
+    grid-template-columns: 3fr 2fr;
+    grid-template-rows: 2fr 8fr 1fr;
+}
+
+/* Grid referencing */
+header {grid-area: header;}
+main {grid-area: map;}
+aside {grid-area: aside;}
+footer {grid-area: footer;}
+
+/*
+    Container Spec
+*/
+
+/* Header */
+header {
+    background-color: #004346;
+    min-height: auto;
+    display: grid;
+    grid-template-rows: 3fr 2fr;
+}
+
+header #query_area {
+    margin: 0;
+    padding-left: 40px;
+    background-color: #978443;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+} 
+
+header #fire_request {
+    background-color: #004346;
+    color: aliceblue;
+    border: 1px solid  #00373a;
+    border-radius: 5px;
+    height: 42px;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+header #fire_request:hover {
+    background-color: #014f53;
+}
+
+header #service_url {
+    background-color: burlywood;
+    height: 42px;
+    border: 1px solid  rgb(204, 155, 91);
+    border-radius: 5px;
+    text-decoration: underline;
+    font-size: 1.1rem;
+    color: azure;
+}
+
+header #service_url:hover {
+    background-color: rgb(224, 197, 162);
+}
+
+header #service_url::placeholder {
+    font-weight: bold;
+}
+
+h1, h2, h3 {
+    color: aliceblue;
+} 
+
+h1 {
+    font-size: 3.5rem;
+    font-family: 'Russo One';
+    letter-spacing: 3px;
+    font-weight: 400;
+    margin: 0;
+    padding-left: 40px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+h2 {
+    font-family: 'Russo One';
+    font-weight: 400;
+    letter-spacing: 2px;
+    border-bottom: 1px solid aliceblue;
+}
+
+
+
+/* Aside */
+aside {
+    background-color: #172A3A;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1vh 1%;
+    gap: 1vh
+}
+
+aside h2 {
+    margin: 1vh auto;
+    font-size: 1.6rem;
+}
+
+/* Section */
+section {
+    width: 100%;
+    padding: 0;
+}
+
+/* Main */
+main {
+    padding: 0;
+    background-color: antiquewhite;
+}
+
+/* For web map to work, an explicit height declaration is needed */
+#map {
+    padding: 0;
+    margin: 0;
+    height: 80vh;
+}
+
+/* Footer */
+footer {
+    background-color: #0a1620;
+    /*
+    background-color: #508991;
+    */
+}
+
+
+
+/*
+    Table Styling
+*/
+
+table {
+    border-collapse: collapse;
+    background-color: #a4bbbe;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    margin: 0;
+    color: aliceblue;
+}
+
+  
+td, th {
+    border: 1px solid #172A3A;
+    padding: 5px 5px;
+}
+
+td {
+    text-align: left;
+    background-color: #a4bbbe;
+    /*color: rgb(3, 87, 3);*/
+    color: #242124; /* raisin black */
+    background-color: gainsboro;
+    font-weight: bold;
+}
+
+
+th  {
+    background-color: #508991;
+}
+
+  
+caption {
+    padding: 10px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color:aliceblue;
+    background-color: rgb(48, 105, 112);
+    border: 1px solid #172A3A;
+}
+
+/* Per table mods */
+#service_tag table {
+    width: 100%;
+}
+
+
+#service_tag th {
+    width: 30%;
+}
+
+#service_tag td {
+    width: 70%;
+}
+
+/* List Views */
+#capabilities_list_view_header {
+    list-style: none;
+    display: flex;
+    flex-flow: row nowrap;
+    background-color: rgb(48, 105, 112);
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 0;
+    margin: 0;
+}
+
+#capabilities_list_view_header > li {
+    flex: 1;
+    color: aliceblue;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    text-align: center;
+    border: 1px solid #172A3A;
+}
+
+#capabilities_list_view_container {
+    margin: 0;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+#capabilities_list_view_container > ul {
+    padding: 0;
+    flex: 1;
+    list-style: none;
+    margin: 0;
+    max-height: 413px;
+    overflow-x: auto;
+}
+
+#capabilities_list_view_container li {
+    border: 1px solid #172A3A;
+    background-color: gainsboro;
+    padding-left: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #343434; /* Jet Black */
+}
+
+/* Animations */
+
+.unready {
+    opacity: 0;
+}
+
+@keyframes appear {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+.ready {
+    animation-name: appear;
+    animation-duration: 0.5s;
+    animation-timing-function: cubic-bezier();
+}
