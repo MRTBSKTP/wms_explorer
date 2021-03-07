@@ -167,7 +167,7 @@ async function fetchCapabilities () {
         let td = td_array[myCounter];
         let data = myService[`${td.id}`];
         td.textContent = data;
-        // make things appear on the page, this approach more SEO friendly than visibility hack
+        // make things appear on the page, this approach more SEO friendly than 'visibility hidden'
         td.className = 'ready';
         myCounter++;
         if (myCounter === td_array.length) {
