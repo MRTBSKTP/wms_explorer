@@ -49,6 +49,7 @@ let myService;
 // Adding a "current" property to list wrappers to apply some transitions
 ul_wrappers.forEach(wrapper => {
     wrapper["current"] = null;
+    wrapper["past"] = null;
 });
 
 /*
@@ -219,25 +220,41 @@ function fillList(listElement, dataArray) {
 */
 function delegateToChild(event) {
 
+    // Hide the ul element and store it at the past property of wrapper
+    event.target.parentNode.setAttribute('slide','out');
+    event.target.parentNode.setAttribute('to','left');
+    event.target.parentNode.parentNode.past = event.target.parentNode; 
+
     // Further delegate to next callback for process based on target element
     if (event.target.parentNode.className = 'capabilities_list_view_detail') {
+        let detail_view;
         switch (event.target.parentNode.id) {
             case "requests":
-                let _requestDetail = getRequestDetails(event.target.textContent, event.target.parentNode);
+                detail_view = getRequestDetails(event.target.textContent, event.target.parentNode);
                 break;
             case "layers":
-                let _layerDetail = getLayerDetails(event.target.textContent, event.target.parentNode);
+                detail_view = getLayerDetails(event.target.textContent, event.target.parentNode);
                 break;
             default:
                 // if neither true:
                 break;
         }
+        // remove the past from DOM for now
+        event.target.parentNode.style.height = 0;
+        // BURADASIN YÜKSEKLİĞİ AYARLA!!!!!!
+
+        // add the new element
+        event.target.parentNode.parentNode.appendChild(detail_view);
         
-        // Hide the ul element
-        event.target.parentNode.setAttribute('slide','out');
-        event.target.parentNode.setAttribute('to','left');
-        // Hide scrollbar of list wrapper
-        event.target.parentNode.parentNode.style.overflowY = 'hidden';
+        // Change the current property of wrapper
+        event.target.parentNode.parentNode.current = detail_view;
+
+        setTimeout(() => {
+            // Show the new element
+            event.target.parentNode.parentNode.current.setAttribute('slide','in');
+            event.target.parentNode.parentNode.current.setAttribute('to','left');        
+        }, 400);
+        
     }
 }
 
@@ -245,10 +262,27 @@ function delegateToChild(event) {
 *   Function for extracting useful details about requests
 */
 function getRequestDetails(requestName, parentNode) {
-    let requestDetail;
+    // DOM element to show details
+    let requestDetail = document.createElement('ul');
+    requestDetail.classList.toggle('capability_detail');
+    requestDetail.id = 'request_detail';
+    
+    let _reqName = document.createElement('li');
+    _reqName.textContent = requestName;
+    requestDetail.appendChild(_reqName);
+    let _formatItem = document.createElement('li');
+    _formatItem.textContent = 'Formatlar';
+    requestDetail.appendChild(_formatItem);
+    
     let myRequest = myService.requests.filter(item => item.tagName === requestName)[0];
     // Extract 'Format' tags and present it as a list
     let formats = Array.from(myRequest.querySelectorAll('Format'));
+
+    formats.forEach(node => {
+        let _li = document.createElement('li');
+        _li.textContent = node.firstChild.nodeValue;
+        requestDetail.appendChild(_li);
+    })
     
     return requestDetail;
 }
@@ -257,7 +291,11 @@ function getRequestDetails(requestName, parentNode) {
 *   Function for extracting useful details about layers
 */
 function getLayerDetails(layerName) {
-    let layerDetail;
+    // DOM element to show details
+    let layerDetail = document.createElement('div');
+    layerDetail.classList.toggle('capability_detail');
+    layerDetail.id = 'layer_detail';
+
 
     return layerDetail;
 }

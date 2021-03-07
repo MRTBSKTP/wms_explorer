@@ -161,9 +161,16 @@ main {
 /* Footer */
 footer {
     background-color: #0a1620;
+    padding-left: 10px;
     /*
     background-color: #508991;
     */
+}
+
+footer p {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 1rem;
+    color: antiquewhite;
 }
 
 
@@ -294,23 +301,41 @@ caption {
 }
 
 .capabilities_list_view_detail li:hover {
-    background-color: #014f53;
+    background-color:  #014f53;
     color: aliceblue;
 }
 
 .capability_detail {
     position: relative;
+    list-style: none;
     top: 0;
     left: 101%;
     padding: 0;
     margin: 0;
     transition-property: left;
-    transition-duration: 0.5s;   
+    transition-duration: 0.5s;  
+}
+
+.capability_detail::after {
+    clear: both;
 }
 
 .capability_detail li:first-child {
-    background-color: #014f53;
+    background-color: rgb(58, 140, 151);
     color: aliceblue;
+    text-align: center;
+}
+
+.capability_detail li:nth-child(2) {
+    background-color: rgb(62, 159, 172);
+    color: rgb(235, 224, 211);
+    text-align: center;
+}
+
+.capability_detail li {
+    background-color: gainsboro;
+    border: 1px solid #172A3A;
+    max-height: 40px;
 }
 
 
