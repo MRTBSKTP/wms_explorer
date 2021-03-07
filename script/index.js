@@ -46,6 +46,10 @@ function Service(title, version, contact_person, contact_org, constraints, fees,
 // Declaring here to escape it from callback's scope and to not fall into closure hell
 let myService;
 
+// Adding a "current" property to list wrappers to apply some transitions
+ul_wrappers.forEach(wrapper => {
+    wrapper["current"] = null;
+});
 
 /*
     Request:
@@ -184,11 +188,20 @@ async function fetchCapabilities () {
                 wrapper.style.overflowY = 'auto';
             });
 
+            ul_wrappers[0].current = ul_requests;
+            ul_wrappers[1].current = ul_layers;
+
+            ul_wrappers[0].current.setAttribute("slide", "in");
+            ul_wrappers[1].current.setAttribute("to","left");
+            ul_wrappers[0].current.setAttribute("slide", "in");
+            ul_wrappers[1].current.setAttribute("to","left");
+
+
             // Fire the animation
-            ul_requests.setAttribute('slide','in');
-            ul_layers.setAttribute('slide','in');
-            ul_requests.setAttribute('to','left');
-            ul_layers.setAttribute('to','left');
+            // ul_requests.setAttribute('slide','in');
+            // ul_layers.setAttribute('slide','in');
+            // ul_requests.setAttribute('to','left');
+            // ul_layers.setAttribute('to','left');
         }
 
         // Add an event listener to details container to catch further clicks,
