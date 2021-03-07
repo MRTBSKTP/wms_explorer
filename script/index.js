@@ -62,19 +62,16 @@ let flag = 0;
 async function fetchCapabilities () {
 
     // First clear leftover modifications from previous invocations
-    if (flag) {
+    if (flag===1) {
         td_array.forEach(td => {
             td.className = '';
             td.textContent = '';
         });
 
-        ul_requests.setAttribute('slide','out');
-        ul_requests.setAttribute('to','right');
-        ul_layers.setAttribute('slide','out');
-        ul_layers.setAttribute('to','right');
-
         ul_wrappers.forEach((wrapper)=>{
             wrapper.style.overflowY = 'hidden';
+            wrapper.current.setAttribute('slide','out');
+            wrapper.current.setAttribute('to','right');
         });
         
         setTimeout(()=>{
@@ -85,8 +82,6 @@ async function fetchCapabilities () {
             ul_layers.removeChild(ul_layers.lastChild)
            } 
         }, 800);
-
-        flag = 0;
         
     } else {flag = 1;}
 
@@ -192,16 +187,10 @@ async function fetchCapabilities () {
             ul_wrappers[1].current = ul_layers;
 
             ul_wrappers[0].current.setAttribute("slide", "in");
-            ul_wrappers[1].current.setAttribute("to","left");
-            ul_wrappers[0].current.setAttribute("slide", "in");
+            ul_wrappers[0].current.setAttribute("to","left");
+            ul_wrappers[1].current.setAttribute("slide", "in");
             ul_wrappers[1].current.setAttribute("to","left");
 
-
-            // Fire the animation
-            // ul_requests.setAttribute('slide','in');
-            // ul_layers.setAttribute('slide','in');
-            // ul_requests.setAttribute('to','left');
-            // ul_layers.setAttribute('to','left');
         }
 
         // Add an event listener to details container to catch further clicks,
