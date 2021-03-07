@@ -266,6 +266,15 @@ caption {
     background-color: #172A3A;
 }
 
+.list_wrapper li {
+    padding-left: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #343434; /* Jet Black */
+}
+
 .capabilities_list_view_detail {
     position: relative;
     left: 101%;
@@ -277,28 +286,47 @@ caption {
     transition-duration: 0.5s;   
 }
 
-.capabilities_list_view_detail[slide="in"] {
-    left: 0%;
-}
-
-.capabilities_list_view_detail[slide="out"] {
-    left: -101%;
-}
-
 .capabilities_list_view_detail li {
     border: 1px solid #172A3A;
     background-color: gainsboro;
-    padding-left: 5px;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #343434; /* Jet Black */
+    height: 25px;
 }
 
 .capabilities_list_view_detail li:hover {
     background-color: #014f53;
     color: aliceblue;
+}
+
+.capability_detail {
+    position: relative;
+    top: 0;
+    left: 101%;
+    padding: 0;
+    margin: 0;
+    transition-property: left;
+    transition-duration: 0.5s;   
+}
+
+.capability_detail li:first-child {
+    background-color: #014f53;
+    color: aliceblue;
+}
+
+
+*[slide="in"][to="left"] {
+    left: 0%;
+}
+
+*[slide="out"][to="left"] {
+    left: -101%;
+}
+
+*[slide="in"][to="right"] {
+    left: 0%;
+}
+
+*[slide="out"][to="right"] {
+    left: 101%;
 }
 
 /* Animations */

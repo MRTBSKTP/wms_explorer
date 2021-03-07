@@ -23,11 +23,13 @@ const section_details = document.querySelector('#capabilities_tag');
 const ul_capabilities_header = document.querySelector('#capabilities_list_view_header');
 const div_capabilities_container = document.querySelector('#capabilities_list_view_container');
 const ul_wrappers = Array.from(div_capabilities_container.querySelectorAll('.list_wrapper'));
-const ul_requests = document.querySelector('#requests');
-const ul_layers = document.querySelector('#layers');
+const ul_requests = div_capabilities_container.querySelector('#requests');
+const ul_layers = div_capabilities_container.querySelector('#layers');
+
 
 // HTMLCollection to array for more loop friendly data type
 let td_array = Array.from(td_collection);
+
 
 // Service Object. Will ease the management of various properties related to service being examined
 function Service(title, version, contact_person, contact_org, constraints, fees, requests, layers) {
@@ -43,6 +45,7 @@ function Service(title, version, contact_person, contact_org, constraints, fees,
 
 // Declaring here to escape it from callback's scope and to not fall into closure hell
 let myService;
+
 
 /*
     Request:
@@ -62,26 +65,27 @@ async function fetchCapabilities () {
         });
 
         ul_requests.setAttribute('slide','out');
+        ul_requests.setAttribute('to','right');
         ul_layers.setAttribute('slide','out');
-    
+        ul_layers.setAttribute('to','right');
+
+        ul_wrappers.forEach((wrapper)=>{
+            wrapper.style.overflowY = 'hidden';
+        });
+        
         setTimeout(()=>{
-            while (ul_layers.lastChild) {
-                ul_layers.removeChild(ul_layers.lastChild);
-            }
-            while (ul_requests.lastChild) {
-                ul_requests.removeChild(ul_requests.lastChild);
-            }
-
-            ul_requests.setAttribute('slide','');
-            ul_layers.setAttribute('slide','');
-
+           while (ul_requests.lastChild) {
+               ul_requests.removeChild(ul_requests.lastChild)
+           } 
+           while (ul_layers.lastChild) {
+            ul_layers.removeChild(ul_layers.lastChild)
+           } 
         }, 800);
 
-        flag != flag;
-    }
+        flag = 0;
+        
+    } else {flag = 1;}
 
-    flag = 1;
-    
     // Obtain target URL
     let targetURLStr = input_url.value;
 
@@ -174,21 +178,23 @@ async function fetchCapabilities () {
             
             let layer_titles = myService.layers.map(element => element.querySelector('Title').firstChild.nodeValue);
             fillList(ul_layers, layer_titles);
+
+             // Show scrollbars if necessary
+             ul_wrappers.forEach(wrapper => {
+                wrapper.style.overflowY = 'auto';
+            });
+
             // Fire the animation
             ul_requests.setAttribute('slide','in');
             ul_layers.setAttribute('slide','in');
-
-            // Show scrollbars if necessary
-            ul_wrappers.forEach(wrapper => {
-                wrapper.style.overflowY = 'auto';
-            });
+            ul_requests.setAttribute('to','left');
+            ul_layers.setAttribute('to','left');
         }
 
         // Add an event listener to details container to catch further clicks,
         // we can utilize event bubbling/capturing mechanism get rid of adding
         // seperate listeners to all chil items
         div_capabilities_container.addEventListener('click', delegateToChild);
-
     },200);
 }
 
@@ -227,6 +233,7 @@ function delegateToChild(event) {
         
         // Hide the ul element
         event.target.parentNode.setAttribute('slide','out');
+        event.target.parentNode.setAttribute('to','left');
         // Hide scrollbar of list wrapper
         event.target.parentNode.parentNode.style.overflowY = 'hidden';
     }
