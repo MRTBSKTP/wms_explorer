@@ -333,9 +333,22 @@ caption {
 }
 
 .capability_detail li {
+    position: relative;
     background-color: gainsboro;
     border: 1px solid #172A3A;
     max-height: 40px;
+}
+
+.capability_detail span {
+    position: absolute;
+    font-size: 1.5rem;
+    font-weight: 700;
+    width: 30px;
+    left: 10px;
+    top: 0px;
+    border: none;
+    background-color: transparent;
+    color: #241f11;
 }
 
 

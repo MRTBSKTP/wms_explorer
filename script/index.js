@@ -239,7 +239,8 @@ function delegateToChild(event) {
                 // if neither true:
                 break;
         }
-        // remove the past from DOM for now
+
+        // This height trick allows us to use relative positioning just like absolute
         event.target.parentNode.style.height = 0;
         // BURADASIN YÜKSEKLİĞİ AYARLA!!!!!!
 
@@ -269,7 +270,11 @@ function getRequestDetails(requestName, parentNode) {
     
     let _reqName = document.createElement('li');
     _reqName.textContent = requestName;
+    let _backArrow = document.createElement('span');
+    _backArrow.textContent = '<' // BUradasın
+    _reqName.appendChild(_backArrow);
     requestDetail.appendChild(_reqName);
+
     let _formatItem = document.createElement('li');
     _formatItem.textContent = 'Formatlar';
     requestDetail.appendChild(_formatItem);
