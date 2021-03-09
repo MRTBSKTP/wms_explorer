@@ -322,6 +322,7 @@ caption {
 .capabilities_list_view_detail li:hover {
     background-color:  #014f53;
     color: aliceblue;
+    cursor: pointer;
 }
 
 .capability_detail {
@@ -333,10 +334,6 @@ caption {
     margin: 0;
     transition-property: left;
     transition-duration: 0.5s;  
-}
-
-.capability_detail::after {
-    clear: both;
 }
 
 .capability_detail li:first-child {

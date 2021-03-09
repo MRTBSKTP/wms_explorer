@@ -224,17 +224,17 @@ function delegateToChild(event) {
     if ((event.target.parentNode.className === 'capabilities_list_view_detail') ) {
 
         // Hide the ul element and store it at the past property of wrapper
+        event.target.parentNode.parentNode.past = event.target.parentNode; 
         event.target.parentNode.setAttribute('slide','out');
         event.target.parentNode.setAttribute('to','left');
-        event.target.parentNode.parentNode.past = event.target.parentNode; 
-
+        
         let detail_view;
         switch (event.target.parentNode.id) {
             case "requests":
-                detail_view = getRequestDetails(event.target.textContent);
+                detail_view = getRequestDetails(event.target.textContent, event.target.parentNode.parentNode);
                 break;
             case "layers":
-                detail_view = getLayerDetails(event.target.textContent);
+                detail_view = getLayerDetails(event.target.textContent, event.target.parentNode.parentNode);
                 break;
             default:
                 // if neither true:
@@ -254,7 +254,7 @@ function delegateToChild(event) {
             // Show the new element
             event.target.parentNode.parentNode.current.setAttribute('slide','in');
             event.target.parentNode.parentNode.current.setAttribute('to','left');        
-        }, 400);
+        }, 600);
         
     }
 }
@@ -262,7 +262,7 @@ function delegateToChild(event) {
 /*
 *   Function for extracting useful details about requests
 */
-function getRequestDetails(requestName) {
+function getRequestDetails(requestName, wrapper) {
     // DOM element to show details
     let requestDetail = document.createElement('ul');
     requestDetail.classList.toggle('capability_detail');
@@ -270,9 +270,8 @@ function getRequestDetails(requestName) {
     
     let _reqName = document.createElement('li');
     _reqName.textContent = requestName;
-    let _backArrow = document.createElement('img');
-    _backArrow.setAttribute('src', '../styles/chevron-circle-left-solid.svg')
-    _backArrow.classList.toggle('back')
+    // Wrapper is for sliding the next element in
+    let _backArrow = createBackButton(wrapper);
     _reqName.appendChild(_backArrow);
     requestDetail.appendChild(_reqName);
 
@@ -291,6 +290,39 @@ function getRequestDetails(requestName) {
     })
     
     return requestDetail;
+}
+
+/*
+*   Encapsulates logic for creating and adding back buttons for sub menus
+*/ 
+function createBackButton (wrapper) {
+    let _backArrow = document.createElement('img');
+    _backArrow.setAttribute('src', '../styles/chevron-circle-left-solid.svg')
+    _backArrow.classList.toggle('back')
+    // This reference will ease access
+    _backArrow["wrapper"] = wrapper;
+
+    _backArrow.addEventListener('click', (event) => {
+        // slide out current detail view
+        event.target.parentNode.parentNode.setAttribute("slide","out");
+        event.target.parentNode.parentNode.setAttribute("to","right");
+
+        // exchange the current and past properties using destructuring syntax
+        [event.target.wrapper.current, event.target.wrapper.past] = [event.target.wrapper.past, event.target.parentNode.parentNode]
+        
+        // slide in new current after previous slide out ends
+        setTimeout(function() {
+            event.target.wrapper.current.style.height = "initial";
+            event.target.wrapper.current.setAttribute("slide","in");
+            event.target.wrapper.current.setAttribute("to","right");
+            setTimeout(()=>{event.target.wrapper.past.style.height = 0}, 400)
+        }, 600);
+
+        
+
+    })
+
+    return _backArrow;
 }
 
 /*
