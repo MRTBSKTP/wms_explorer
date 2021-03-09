@@ -220,20 +220,21 @@ function fillList(listElement, dataArray) {
 */
 function delegateToChild(event) {
 
-    // Hide the ul element and store it at the past property of wrapper
-    event.target.parentNode.setAttribute('slide','out');
-    event.target.parentNode.setAttribute('to','left');
-    event.target.parentNode.parentNode.past = event.target.parentNode; 
-
     // Further delegate to next callback for process based on target element
-    if (event.target.parentNode.className = 'capabilities_list_view_detail') {
+    if ((event.target.parentNode.className === 'capabilities_list_view_detail') ) {
+
+        // Hide the ul element and store it at the past property of wrapper
+        event.target.parentNode.setAttribute('slide','out');
+        event.target.parentNode.setAttribute('to','left');
+        event.target.parentNode.parentNode.past = event.target.parentNode; 
+
         let detail_view;
         switch (event.target.parentNode.id) {
             case "requests":
-                detail_view = getRequestDetails(event.target.textContent, event.target.parentNode);
+                detail_view = getRequestDetails(event.target.textContent);
                 break;
             case "layers":
-                detail_view = getLayerDetails(event.target.textContent, event.target.parentNode);
+                detail_view = getLayerDetails(event.target.textContent);
                 break;
             default:
                 // if neither true:
@@ -242,7 +243,6 @@ function delegateToChild(event) {
 
         // This height trick allows us to use relative positioning just like absolute
         event.target.parentNode.style.height = 0;
-        // BURADASIN YÜKSEKLİĞİ AYARLA!!!!!!
 
         // add the new element
         event.target.parentNode.parentNode.appendChild(detail_view);
@@ -262,7 +262,7 @@ function delegateToChild(event) {
 /*
 *   Function for extracting useful details about requests
 */
-function getRequestDetails(requestName, parentNode) {
+function getRequestDetails(requestName) {
     // DOM element to show details
     let requestDetail = document.createElement('ul');
     requestDetail.classList.toggle('capability_detail');
@@ -270,8 +270,9 @@ function getRequestDetails(requestName, parentNode) {
     
     let _reqName = document.createElement('li');
     _reqName.textContent = requestName;
-    let _backArrow = document.createElement('span');
-    _backArrow.textContent = '<' // BUradasın
+    let _backArrow = document.createElement('img');
+    _backArrow.setAttribute('src', '../styles/chevron-circle-left-solid.svg')
+    _backArrow.classList.toggle('back')
     _reqName.appendChild(_backArrow);
     requestDetail.appendChild(_reqName);
 
