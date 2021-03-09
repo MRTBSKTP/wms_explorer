@@ -32,10 +32,9 @@ let td_array = Array.from(td_collection);
 
 
 // Service Object. Will ease the management of various properties related to service being examined
-function Service(title, version, contact_person, contact_org, constraints, fees, requests, layers) {
+function Service(title, version, contact_org, constraints, fees, requests, layers) {
     this.title = title;
     this.version = version;
-    this.contact_person = contact_person;
     this.contact_org = contact_org;
     this.constraints = constraints;
     this.fees = fees;
@@ -153,7 +152,6 @@ async function fetchCapabilities () {
     myService = new Service(
         title = service_node.getElementsByTagName('Title')[0].firstChild.nodeValue,
         version = service_node.parentNode.getAttribute('version'),
-        contact_person = service_node.getElementsByTagName('ContactPerson')[0].firstChild.nodeValue,
         contant_org = service_node.getElementsByTagName('ContactOrganization')[0].firstChild.nodeValue,
         constraints = service_node.getElementsByTagName('AccessConstraints')[0].firstChild.nodeValue,
         fees = service_node.getElementsByTagName('Fees')[0].firstChild.nodeValue,

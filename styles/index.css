@@ -287,10 +287,7 @@ caption {
     overflow-y: hidden;
     position: relative;
     background-color: #172A3A;
-}
-
-.list_wrapper>ul {
-    max-height: 57vh;
+    max-height: 60vh;
 }
 
 .list_wrapper li {
