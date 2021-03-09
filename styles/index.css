@@ -283,11 +283,14 @@ caption {
     flex: 1;
     margin: 0;
     padding: 0;
-    max-height: 57vh;
     overflow-x: hidden;
     overflow-y: hidden;
     position: relative;
     background-color: #172A3A;
+}
+
+.list_wrapper>ul {
+    max-height: 57vh;
 }
 
 .list_wrapper li {
