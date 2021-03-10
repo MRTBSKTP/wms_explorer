@@ -173,7 +173,7 @@ async function fetchCapabilities (event) {
         constraints = service_node.getElementsByTagName('AccessConstraints')[0].firstChild.nodeValue,
         fees = service_node.getElementsByTagName('Fees')[0].firstChild.nodeValue,
         requests = Array.from(request_node.children),
-        layers = Array.from(capability_node.querySelectorAll('Layer > Layer'))
+        layers = Array.from(xml_DOM.querySelectorAll('Capability>Layer>Layer'))
     );
 
     // Populating the service table with a fancy gradual appearing look.
@@ -246,8 +246,6 @@ function delegateToChild(event) {
     // Further delegate to next callback for process based on target element
     if (event.target.parentNode.className === 'capabilities_list_view_detail') {
 
-        console.log(event.target.parentNode.className);
-
         // Hide the ul element and store it at the past property of wrapper
         event.target.parentNode.parentNode.past = event.target.parentNode; 
         event.target.parentNode.setAttribute('slide','out');
@@ -265,8 +263,6 @@ function delegateToChild(event) {
                 // if neither true:
                 break;
         }
-
-        console.log(detail_view);
         
         if (detail_view) {
             // This height trick allows us to use relative positioning just like absolute
@@ -305,6 +301,7 @@ function getRequestDetails(requestName, wrapper) {
 
     let _formatItem = document.createElement('li');
     _formatItem.textContent = 'Formatlar';
+    _formatItem.setAttribute('subheader','true');
     requestDetail.appendChild(_formatItem);
     
     let myRequest = myService.requests.filter(item => item.tagName === requestName)[0];
@@ -323,20 +320,35 @@ function getRequestDetails(requestName, wrapper) {
 /*
 *   Function for extracting useful details about layers
 */
-function getLayerDetails(layerName, wrapper) {
-    // DOM element to show details
-    let layerDetail = document.createElement('ul');
-    layerDetail.classList.toggle('capability_detail');
-    layerDetail.id = 'layer_detail';
+function getLayerDetails(layerTitle, wrapper) {
 
+    // DOM element to show details
+    let layerDetail 
     let _lyrName = document.createElement('li');
-    _lyrName.textContent = layerName;
+    _lyrName.textContent = layerTitle;
     // Wrapper is for sliding the next element in
     let _backArrow = createBackButton(wrapper);
     _lyrName.appendChild(_backArrow);
-    layerDetail.appendChild(_lyrName);
+    
+    // query if layer has sublayers
+    let layerNode = myService.layers.filter(
+        layer => layer.querySelector('Title').firstChild.nodeValue === layerTitle
+        )[0];
 
-
+    let nodeList = Array.from(layerNode.querySelectorAll('Layer'));
+    if (nodeList) {
+        // If layer contains more sub layers
+        layerDetail = wrapper.current.cloneNode() // No need for deep cloning because we don't want text nodes
+        layerDetail.classList.add('capabilities_list_view_detail');
+        layerDetail.appendChild(_lyrName);
+        let layerNames = nodeList.map(element => element.querySelector('Title').firstChild.nodeValue);
+        fillList(layerDetail, layerNames);
+    } else {
+        layerDetail = document.createElement('ul');
+        layerDetail.classList.toggle('capability_detail');
+        layerDetail.id = 'layer_detail';
+        layerDetail.appendChild(_lyrName);
+    }
     return layerDetail;
 }
 

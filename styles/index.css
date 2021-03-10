@@ -316,8 +316,7 @@ caption {
 .capabilities_list_view_detail li {
     border: 1px solid #172A3A;
     background-color: gainsboro;
-    height: 25px;
-    max-height: 40px;
+    max-height: fit-content;
 }
 
 .capabilities_list_view_detail li:hover {
@@ -339,13 +338,19 @@ caption {
 
 .capability_detail li:first-child {
     background-color: rgb(58, 140, 151);
+    max-height: max-content;
+    font-size: 1.3rem;
+    font-weight: bold;
     color: aliceblue;
     text-align: center;
 }
 
-.capability_detail li:nth-child(2) {
+.capability_detail li[subheader="true"]:nth-child(2) {
     background-color: rgb(62, 159, 172);
     color: rgb(235, 224, 211);
+    height: 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
     text-align: center;
 }
 
@@ -360,10 +365,10 @@ caption {
     position: absolute;
     font-size: 1.5rem;
     font-weight: 700;
-    width: 18px;
-    height: 18px;
-    left: 10px;
-    top: 3px;
+    width: 24px;
+    height: 24px;
+    left: 5px;
+    top: 4px;
     fill: #978443;
     border-radius: 50%;
     border: 1px solid transparent;
