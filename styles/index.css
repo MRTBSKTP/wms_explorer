@@ -101,6 +101,7 @@ header #fire_request {
 
 header #fire_request:hover {
     background-color: #014f53;
+    cursor: pointer;
 }
 
 header #service_url {

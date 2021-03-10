@@ -59,7 +59,15 @@ ul_wrappers.forEach(wrapper => {
 let flag = 0;
 
 // fetching with async await sytnax, allows finer control on async processes
-async function fetchCapabilities () {
+async function fetchCapabilities (event) {
+
+    // Disable button and input for a short time
+    event.target.disabled = true;
+    input_url.disabled = true;
+    input_url.style.backgroundColor = "#696969";
+    input_url.style.color = "black";
+    event.target.style.backgroundColor = "#696969";
+    document.body.style.cursor = 'progress';
 
     // First clear leftover modifications from previous invocations
     if (flag===1) {
@@ -68,20 +76,30 @@ async function fetchCapabilities () {
             td.textContent = '';
         });
 
-        ul_wrappers.forEach((wrapper)=>{
+        ul_wrappers.forEach(wrapper => {
             wrapper.style.overflowY = 'hidden';
             wrapper.current.setAttribute('slide','out');
             wrapper.current.setAttribute('to','right');
         });
         
         setTimeout(()=>{
-           while (ul_requests.lastChild) {
-               ul_requests.removeChild(ul_requests.lastChild)
-           } 
-           while (ul_layers.lastChild) {
-            ul_layers.removeChild(ul_layers.lastChild)
-           } 
-        }, 800);
+            ul_wrappers.forEach(wrapper => {
+                let to_delete = Array.from(wrapper.querySelectorAll('.capability_detail'));
+                to_delete.forEach(item => {wrapper.removeChild(item)});
+            });
+            while (ul_requests.lastChild) {
+                ul_requests.removeChild(ul_requests.lastChild)
+            } 
+            while (ul_layers.lastChild) {
+                ul_layers.removeChild(ul_layers.lastChild)
+            } 
+            
+            ul_requests.style.height = 'initial';
+            ul_layers.style.height = 'initial';
+
+            ul_requests.setAttribute('slide','');
+            ul_layers.setAttribute('to','');
+        },  800);
         
     } else {flag = 1;}
 
@@ -169,6 +187,14 @@ async function fetchCapabilities () {
         td.className = 'ready';
         myCounter++;
         if (myCounter === td_array.length) {
+
+            // Restyle button and input to initial status
+            event.target.disabled = false;
+            input_url.disabled = true;
+            input_url.style.backgroundColor = 'burlywood';
+            event.target.style.backgroundColor = '#004346';
+            document.body.style.cursor = 'initial';
+
             clearInterval(myInterval);
             // Also filling the elements concerning request types and layers
             let request_tagNames = myService.requests.map(element => element.tagName);
@@ -219,7 +245,7 @@ function fillList(listElement, dataArray) {
 function delegateToChild(event) {
 
     // Further delegate to next callback for process based on target element
-    if ((event.target.parentNode.className === 'capabilities_list_view_detail') ) {
+    if (event.target.parentNode.className === 'capabilities_list_view_detail') {
 
         // Hide the ul element and store it at the past property of wrapper
         event.target.parentNode.parentNode.past = event.target.parentNode; 
@@ -306,19 +332,17 @@ function createBackButton (wrapper) {
         event.target.parentNode.parentNode.setAttribute("to","right");
 
         // exchange the current and past properties using destructuring syntax
-        [event.target.wrapper.current, event.target.wrapper.past] = [event.target.wrapper.past, event.target.parentNode.parentNode]
-        
+        [event.target.wrapper.current, event.target.wrapper.past] = [event.target.wrapper.past, event.target.parentNode.parentNode];
+
         // slide in new current after previous slide out ends
         setTimeout(function() {
+            event.target.wrapper.removeChild(event.target.wrapper.past);
+            event.target.wrapper.past = null;
             event.target.wrapper.current.style.height = "initial";
             event.target.wrapper.current.setAttribute("slide","in");
             event.target.wrapper.current.setAttribute("to","right");
-            setTimeout(()=>{event.target.wrapper.past.style.height = 0}, 400)
         }, 600);
-
-        
-
-    })
+    });
 
     return _backArrow;
 }
