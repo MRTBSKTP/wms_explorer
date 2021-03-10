@@ -105,13 +105,13 @@ header #fire_request:hover {
 }
 
 header #service_url {
-    background-color: burlywood;
+    background-color: rgb(248, 234, 213);
     height: 42px;
-    border: 1px solid  rgb(204, 155, 91);
+    border: 1px solid  rgb(134, 107, 71);
     border-radius: 5px;
     text-decoration: underline;
     font-size: 1.1rem;
-    color: azure;
+    color:rgb(13, 93, 97);
 }
 
 header #service_url:hover {
@@ -120,6 +120,7 @@ header #service_url:hover {
 
 header #service_url::placeholder {
     font-weight: bold;
+    color: #00373a;
 }
 
 h1, h2, h3 {
@@ -153,7 +154,8 @@ aside {
     align-items: center;
     justify-content: flex-start;
     padding: 1vh 1%;
-    gap: 1vh
+    gap: 1vh;
+    overflow: hidden;
 }
 
 aside h2 {
@@ -288,7 +290,7 @@ caption {
     overflow-y: hidden;
     position: relative;
     background-color: #172A3A;
-    max-height: 60vh;
+    max-height: 60.5vh;
 }
 
 .list_wrapper li {
@@ -315,6 +317,7 @@ caption {
     border: 1px solid #172A3A;
     background-color: gainsboro;
     height: 25px;
+    max-height: 40px;
 }
 
 .capabilities_list_view_detail li:hover {
@@ -350,7 +353,6 @@ caption {
     position: relative;
     background-color: gainsboro;
     border: 1px solid #172A3A;
-    max-height: 40px;
 }
 
 .capability_detail img {
@@ -372,7 +374,6 @@ caption {
     filter: invert(100%);
     cursor: pointer;
 }
-
 
 *[slide="in"][to="left"] {
     left: 0%;

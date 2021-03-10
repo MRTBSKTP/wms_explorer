@@ -64,9 +64,8 @@ async function fetchCapabilities (event) {
     // Disable button and input for a short time
     event.target.disabled = true;
     input_url.disabled = true;
-    input_url.style.backgroundColor = "#696969";
-    input_url.style.color = "black";
     event.target.style.backgroundColor = "#696969";
+    event.target.style.cursor = 'progress'
     document.body.style.cursor = 'progress';
 
     // First clear leftover modifications from previous invocations
@@ -190,9 +189,9 @@ async function fetchCapabilities (event) {
 
             // Restyle button and input to initial status
             event.target.disabled = false;
-            input_url.disabled = true;
-            input_url.style.backgroundColor = 'burlywood';
+            input_url.disabled = false;
             event.target.style.backgroundColor = '#004346';
+            event.target.style.cursor = 'initial'
             document.body.style.cursor = 'initial';
 
             clearInterval(myInterval);
@@ -247,11 +246,13 @@ function delegateToChild(event) {
     // Further delegate to next callback for process based on target element
     if (event.target.parentNode.className === 'capabilities_list_view_detail') {
 
+        console.log(event.target.parentNode.className);
+
         // Hide the ul element and store it at the past property of wrapper
         event.target.parentNode.parentNode.past = event.target.parentNode; 
         event.target.parentNode.setAttribute('slide','out');
         event.target.parentNode.setAttribute('to','left');
-        
+
         let detail_view;
         switch (event.target.parentNode.id) {
             case "requests":
@@ -265,21 +266,24 @@ function delegateToChild(event) {
                 break;
         }
 
-        // This height trick allows us to use relative positioning just like absolute
-        event.target.parentNode.style.height = 0;
-
-        // add the new element
-        event.target.parentNode.parentNode.appendChild(detail_view);
+        console.log(detail_view);
         
-        // Change the current property of wrapper
-        event.target.parentNode.parentNode.current = detail_view;
+        if (detail_view) {
+            // This height trick allows us to use relative positioning just like absolute
+            event.target.parentNode.style.height = 0;
 
-        setTimeout(() => {
-            // Show the new element
-            event.target.parentNode.parentNode.current.setAttribute('slide','in');
-            event.target.parentNode.parentNode.current.setAttribute('to','left');        
-        }, 600);
+            // add the new element
+            event.target.parentNode.parentNode.appendChild(detail_view);
         
+            // Change the current property of wrapper
+            event.target.parentNode.parentNode.current = detail_view;
+
+            setTimeout(() => {
+                // Show the new element
+                event.target.parentNode.parentNode.current.setAttribute('slide','in');
+                event.target.parentNode.parentNode.current.setAttribute('to','left');        
+            }, 600);
+        }
     }
 }
 
@@ -317,6 +321,26 @@ function getRequestDetails(requestName, wrapper) {
 }
 
 /*
+*   Function for extracting useful details about layers
+*/
+function getLayerDetails(layerName, wrapper) {
+    // DOM element to show details
+    let layerDetail = document.createElement('ul');
+    layerDetail.classList.toggle('capability_detail');
+    layerDetail.id = 'layer_detail';
+
+    let _lyrName = document.createElement('li');
+    _lyrName.textContent = layerName;
+    // Wrapper is for sliding the next element in
+    let _backArrow = createBackButton(wrapper);
+    _lyrName.appendChild(_backArrow);
+    layerDetail.appendChild(_lyrName);
+
+
+    return layerDetail;
+}
+
+/*
 *   Encapsulates logic for creating and adding back buttons for sub menus
 */ 
 function createBackButton (wrapper) {
@@ -345,19 +369,6 @@ function createBackButton (wrapper) {
     });
 
     return _backArrow;
-}
-
-/*
-*   Function for extracting useful details about layers
-*/
-function getLayerDetails(layerName) {
-    // DOM element to show details
-    let layerDetail = document.createElement('div');
-    layerDetail.classList.toggle('capability_detail');
-    layerDetail.id = 'layer_detail';
-
-
-    return layerDetail;
 }
 
 
