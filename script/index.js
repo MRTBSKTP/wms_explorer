@@ -30,7 +30,6 @@ const ul_layers = div_capabilities_container.querySelector('#layers');
 // HTMLCollection to array for more loop friendly data type
 let td_array = Array.from(td_collection);
 
-
 // Service Object. Will ease the management of various properties related to service being examined
 function Service(title, version, contact_org, constraints, fees, requests, layers) {
     this.title = title;
@@ -44,6 +43,8 @@ function Service(title, version, contact_org, constraints, fees, requests, layer
 
 // Declaring here to escape it from callback's scope and to not fall into closure hell
 let myService;
+let xml_DOM;
+let current_layer_node;
 
 // Adding a "current" property to list wrappers to apply some transitions
 ul_wrappers.forEach(wrapper => {
@@ -107,6 +108,12 @@ async function fetchCapabilities (event) {
 
     // End invocation if empty URL string case
     if (!(targetURLStr)) {
+        // Restyle button and input to initial status
+        event.target.disabled = false;
+        input_url.disabled = false;
+        event.target.style.backgroundColor = '#004346';
+        event.target.style.cursor = 'initial'
+        document.body.style.cursor = 'initial';
         return 1
     }
 
@@ -147,7 +154,7 @@ async function fetchCapabilities (event) {
     // Preparing DOM for XML data, first we need the parse the string, then create the
     // DOM accordingly
     let xml_parser = new DOMParser();
-    let xml_DOM = xml_parser.parseFromString(responseText, 'text/xml');
+    xml_DOM = xml_parser.parseFromString(responseText, 'text/xml');
 
     // Accesing the service  and capabilit tag nodes, below ops. could be carried on root 
     // node/dom object this is simply a design decision. DOM selectors are case sensitive!
@@ -164,7 +171,8 @@ async function fetchCapabilities (event) {
     Since Layer node tend to be bloated, i will only extract queryable layer nodes
     */
     let request_node = capability_node.querySelector('Request');
-    
+    let main_layer_node = capability_node.getElementsByTagName('Layer')[0];
+
     // Service instance
     myService = new Service(
         title = service_node.getElementsByTagName('Title')[0].firstChild.nodeValue,
@@ -173,8 +181,17 @@ async function fetchCapabilities (event) {
         constraints = service_node.getElementsByTagName('AccessConstraints')[0].firstChild.nodeValue,
         fees = service_node.getElementsByTagName('Fees')[0].firstChild.nodeValue,
         requests = Array.from(request_node.children),
-        layers = Array.from(xml_DOM.querySelectorAll('Capability>Layer>Layer'))
+        layers = Array.from(capability_node.querySelectorAll('Layer>Layer'))
     );
+
+    let first_level_layers = [];
+    
+    main_layer_node.childNodes.forEach(node => {
+        if (node.tagName === 'Layer') {
+            first_level_layers.push(node);
+        }
+    })
+
 
     // Populating the service table with a fancy gradual appearing look.
     let myCounter = 0;
@@ -199,7 +216,7 @@ async function fetchCapabilities (event) {
             let request_tagNames = myService.requests.map(element => element.tagName);
             fillList(ul_requests, request_tagNames);
             
-            let layer_titles = myService.layers.map(element => element.querySelector('Title').firstChild.nodeValue);
+            let layer_titles = first_level_layers.map(element => element.querySelector('Title').firstChild.nodeValue);
             fillList(ul_layers, layer_titles);
 
              // Show scrollbars if necessary
@@ -245,8 +262,6 @@ function delegateToChild(event) {
 
     // Further delegate to next callback for process based on target element
     if (event.target.parentNode.classList.contains('capabilities_list_view_detail') && (event.target.tagName === 'LI')) {
-
-        console.log(event.target);
 
         // Hide the ul element and store it at the past property of wrapper
         event.target.parentNode.parentNode.past = event.target.parentNode; 
@@ -337,8 +352,11 @@ function getLayerDetails(layerTitle, wrapper) {
         layer => layer.querySelector('Title').firstChild.nodeValue === layerTitle
         )[0];
 
-    let nodeList = Array.from(layerNode.querySelectorAll('Layer'));
-    if (nodeList) {
+    //console.log(layerNode);
+
+    let nodeList = Array.from(layerNode.querySelectorAll(':scope>Layer'));
+
+    if (nodeList.length) {
         // If layer contains more sub layers
         layerDetail = wrapper.current.cloneNode() // No need for deep cloning because we don't want text nodes
         layerDetail.classList.add('capabilities_list_view_detail');
