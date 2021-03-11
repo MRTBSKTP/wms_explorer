@@ -244,7 +244,9 @@ function fillList(listElement, dataArray) {
 function delegateToChild(event) {
 
     // Further delegate to next callback for process based on target element
-    if (event.target.parentNode.className === 'capabilities_list_view_detail') {
+    if (event.target.parentNode.classList.contains('capabilities_list_view_detail') && (event.target.tagName === 'LI')) {
+
+        console.log(event.target);
 
         // Hide the ul element and store it at the past property of wrapper
         event.target.parentNode.parentNode.past = event.target.parentNode; 
@@ -292,7 +294,7 @@ function getRequestDetails(requestName, wrapper) {
     requestDetail.classList.toggle('capability_detail');
     requestDetail.id = 'request_detail';
     
-    let _reqName = document.createElement('li');
+    let _reqName = document.createElement('div');
     _reqName.textContent = requestName;
     // Wrapper is for sliding the next element in
     let _backArrow = createBackButton(wrapper);
@@ -324,7 +326,7 @@ function getLayerDetails(layerTitle, wrapper) {
 
     // DOM element to show details
     let layerDetail 
-    let _lyrName = document.createElement('li');
+    let _lyrName = document.createElement('div');
     _lyrName.textContent = layerTitle;
     // Wrapper is for sliding the next element in
     let _backArrow = createBackButton(wrapper);
@@ -340,6 +342,7 @@ function getLayerDetails(layerTitle, wrapper) {
         // If layer contains more sub layers
         layerDetail = wrapper.current.cloneNode() // No need for deep cloning because we don't want text nodes
         layerDetail.classList.add('capabilities_list_view_detail');
+        layerDetail.classList.toggle('capability_detail');
         layerDetail.appendChild(_lyrName);
         let layerNames = nodeList.map(element => element.querySelector('Title').firstChild.nodeValue);
         fillList(layerDetail, layerNames);

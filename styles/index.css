@@ -300,6 +300,8 @@ caption {
     font-size: 1rem;
     font-weight: 600;
     color: #343434; /* Jet Black */
+    background-color: gainsboro;
+    border: 1px solid #172A3A;
 }
 
 .capabilities_list_view_detail {
@@ -336,16 +338,20 @@ caption {
     transition-duration: 0.5s;  
 }
 
-.capability_detail li:first-child {
+.capability_detail div {
     background-color: rgb(58, 140, 151);
+    border: 1px solid #172A3A;
+    padding-top: 3px;
+    padding-bottom: 3px;
     max-height: max-content;
     font-size: 1.3rem;
     font-weight: bold;
     color: aliceblue;
     text-align: center;
+    cursor: default;
 }
 
-.capability_detail li[subheader="true"]:nth-child(2) {
+.capability_detail li[subheader="true"] {
     background-color: rgb(62, 159, 172);
     color: rgb(235, 224, 211);
     height: 30px;
@@ -356,8 +362,6 @@ caption {
 
 .capability_detail li {
     position: relative;
-    background-color: gainsboro;
-    border: 1px solid #172A3A;
 }
 
 .capability_detail img {
