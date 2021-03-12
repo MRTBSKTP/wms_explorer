@@ -269,11 +269,11 @@ function delegateToChild(event) {
         event.target.parentNode.setAttribute('to','left');
 
         let detail_view;
-        switch (event.target.parentNode.id) {
-            case "requests":
+        switch (event.target.parentNode.type) {
+            case "request_list":
                 detail_view = getRequestDetails(event.target.textContent, event.target.parentNode.parentNode);
                 break;
-            case "layers":
+            case "layer_list":
                 detail_view = getLayerDetails(event.target.textContent, event.target.parentNode.parentNode);
                 break;
             default:
@@ -308,6 +308,7 @@ function getRequestDetails(requestName, wrapper) {
     let requestDetail = document.createElement('ul');
     requestDetail.classList.toggle('capability_detail');
     requestDetail.id = 'request_detail';
+    requestDetail.setAttribute('type','request_list');
     
     let _reqName = document.createElement('div');
     _reqName.textContent = requestName;
@@ -354,22 +355,34 @@ function getLayerDetails(layerTitle, wrapper) {
 
     //console.log(layerNode);
 
+    console.log('making a test!');
+
     let nodeList = Array.from(layerNode.querySelectorAll(':scope>Layer'));
 
     if (nodeList.length) {
+
+        console.log('yay');
+
         // If layer contains more sub layers
         layerDetail = wrapper.current.cloneNode() // No need for deep cloning because we don't want text nodes
+        layerDetail.id = Math.random(); // Need a unique id
         layerDetail.classList.add('capabilities_list_view_detail');
         layerDetail.classList.toggle('capability_detail');
         layerDetail.appendChild(_lyrName);
         let layerNames = nodeList.map(element => element.querySelector('Title').firstChild.nodeValue);
         fillList(layerDetail, layerNames);
     } else {
+
+        console.log('nay');
+
         layerDetail = document.createElement('ul');
         layerDetail.classList.toggle('capability_detail');
         layerDetail.id = 'layer_detail';
         layerDetail.appendChild(_lyrName);
     }
+
+    layerDetail.setAttribute('type','layer_list');
+
     return layerDetail;
 }
 
@@ -393,8 +406,7 @@ function createBackButton (wrapper) {
 
         // slide in new current after previous slide out ends
         setTimeout(function() {
-            event.target.wrapper.removeChild(event.target.wrapper.past);
-            event.target.wrapper.past = null;
+            event.target.wrapper.past = event.target.wrapper.removeChild(event.target.wrapper.past);
             event.target.wrapper.current.style.height = "initial";
             event.target.wrapper.current.setAttribute("slide","in");
             event.target.wrapper.current.setAttribute("to","right");
