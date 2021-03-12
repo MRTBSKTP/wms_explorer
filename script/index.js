@@ -46,10 +46,13 @@ let myService;
 let xml_DOM;
 let current_layer_node;
 
-// Adding a "current" property to list wrappers to apply some transitions
+// Adding a "current" property to list wrappers to apply some transitions 
+// a kind of LIFO, wil only use shift and unshift methods
 ul_wrappers.forEach(wrapper => {
-    wrapper["current"] = null;
-    wrapper["past"] = null;
+    // will use as a LIFO, wil only use shift and unshift methods to add-pop items
+    wrapper["stack"] = []
+    // stack[0] is current
+    // stack[1] is past element
 });
 
 /*
@@ -78,8 +81,9 @@ async function fetchCapabilities (event) {
 
         ul_wrappers.forEach(wrapper => {
             wrapper.style.overflowY = 'hidden';
-            wrapper.current.setAttribute('slide','out');
-            wrapper.current.setAttribute('to','right');
+            wrapper.stack[0].setAttribute('slide','out');
+            wrapper.stack[0].setAttribute('to','right');
+            wrapper.stack = [];
         });
         
         setTimeout(()=>{
@@ -224,13 +228,13 @@ async function fetchCapabilities (event) {
                 wrapper.style.overflowY = 'auto';
             });
 
-            ul_wrappers[0].current = ul_requests;
-            ul_wrappers[1].current = ul_layers;
+            ul_wrappers[0].stack.unshift(ul_requests);
+            ul_wrappers[1].stack.unshift(ul_layers);
 
-            ul_wrappers[0].current.setAttribute("slide", "in");
-            ul_wrappers[0].current.setAttribute("to","left");
-            ul_wrappers[1].current.setAttribute("slide", "in");
-            ul_wrappers[1].current.setAttribute("to","left");
+            ul_wrappers[0].stack[0].setAttribute("slide", "in");
+            ul_wrappers[0].stack[0].setAttribute("to","left");
+            ul_wrappers[1].stack[0].setAttribute("slide", "in");
+            ul_wrappers[1].stack[0].setAttribute("to","left");
 
         }
 
@@ -263,12 +267,8 @@ function delegateToChild(event) {
     // Further delegate to next callback for process based on target element
     if (event.target.parentNode.classList.contains('capabilities_list_view_detail') && (event.target.tagName === 'LI')) {
 
-        // Hide the ul element and store it at the past property of wrapper
-        event.target.parentNode.parentNode.past = event.target.parentNode; 
-        event.target.parentNode.setAttribute('slide','out');
-        event.target.parentNode.setAttribute('to','left');
-
         let detail_view;
+    
         switch (event.target.parentNode.type) {
             case "request_list":
                 detail_view = getRequestDetails(event.target.textContent, event.target.parentNode.parentNode);
@@ -282,19 +282,22 @@ function delegateToChild(event) {
         }
         
         if (detail_view) {
+
+            // Hide the current
+            event.target.parentNode.parentNode.stack.unshift(detail_view);
+            event.target.parentNode.parentNode.stack[1].setAttribute('slide','out');
+            event.target.parentNode.parentNode.stack[1].setAttribute('to','left');
+
             // This height trick allows us to use relative positioning just like absolute
             event.target.parentNode.style.height = 0;
 
             // add the new element
             event.target.parentNode.parentNode.appendChild(detail_view);
         
-            // Change the current property of wrapper
-            event.target.parentNode.parentNode.current = detail_view;
-
             setTimeout(() => {
                 // Show the new element
-                event.target.parentNode.parentNode.current.setAttribute('slide','in');
-                event.target.parentNode.parentNode.current.setAttribute('to','left');        
+                event.target.parentNode.parentNode.stack[0].setAttribute('slide','in');
+                event.target.parentNode.parentNode.stack[0].setAttribute('to','left');        
             }, 600);
         }
     }
@@ -364,8 +367,10 @@ function getLayerDetails(layerTitle, wrapper) {
         console.log('yay');
 
         // If layer contains more sub layers
-        layerDetail = wrapper.current.cloneNode() // No need for deep cloning because we don't want text nodes
+        layerDetail = ul_layers.cloneNode() // No need for deep cloning because we don't want text nodes
         layerDetail.id = Math.random(); // Need a unique id
+        layerDetail.setAttribute('slide','');
+        layerDetail.setAttribute('to','');
         layerDetail.classList.add('capabilities_list_view_detail');
         layerDetail.classList.toggle('capability_detail');
         layerDetail.appendChild(_lyrName);
@@ -397,19 +402,18 @@ function createBackButton (wrapper) {
     _backArrow["wrapper"] = wrapper;
 
     _backArrow.addEventListener('click', (event) => {
+        
         // slide out current detail view
-        event.target.parentNode.parentNode.setAttribute("slide","out");
-        event.target.parentNode.parentNode.setAttribute("to","right");
-
-        // exchange the current and past properties using destructuring syntax
-        [event.target.wrapper.current, event.target.wrapper.past] = [event.target.wrapper.past, event.target.parentNode.parentNode];
+        event.target.wrapper.stack[0].setAttribute("slide","out");
+        event.target.wrapper.stack[0].setAttribute("to","right");
 
         // slide in new current after previous slide out ends
         setTimeout(function() {
-            event.target.wrapper.past = event.target.wrapper.removeChild(event.target.wrapper.past);
-            event.target.wrapper.current.style.height = "initial";
-            event.target.wrapper.current.setAttribute("slide","in");
-            event.target.wrapper.current.setAttribute("to","right");
+            event.target.wrapper.removeChild(event.target.wrapper.stack[0]);
+            event.target.wrapper.stack.shift();
+            event.target.wrapper.stack[0].style.height = "initial";
+            event.target.wrapper.stack[0].setAttribute("slide","in");
+            event.target.wrapper.stack[0].setAttribute("to","right");
         }, 600);
     });
 
