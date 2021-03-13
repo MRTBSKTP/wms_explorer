@@ -346,7 +346,9 @@ function getLayerDetails(layerTitle, wrapper) {
     // DOM element to show details
     let layerDetail 
     let _lyrName = document.createElement('div');
-    _lyrName.textContent = layerTitle;
+    let p = document.createElement('p');
+    p.textContent = layerTitle;
+    _lyrName.appendChild(p);
     // Wrapper is for sliding the next element in
     let _backArrow = createBackButton(wrapper);
     _lyrName.appendChild(_backArrow);
@@ -356,16 +358,15 @@ function getLayerDetails(layerTitle, wrapper) {
         layer => layer.querySelector('Title').firstChild.nodeValue === layerTitle
         )[0];
 
-    //console.log(layerNode);
+    // ':scope' polyfill is unavailable in some browser, to accomodate we can use
+    // a jquery like hack to add a temporary id to element
+    layerNode.setAttribute('id', 'scope');
 
-    console.log('making a test!');
-
-    let nodeList = Array.from(layerNode.querySelectorAll(':scope>Layer'));
+    let nodeList = Array.from(layerNode.querySelectorAll(`#scope>Layer`));
+    // or with ':scope' polyfill
+    //let nodeList = Array.from(layerNode.querySelectorAll(`:scope>Layer`));
 
     if (nodeList.length) {
-
-        console.log('yay');
-
         // If layer contains more sub layers
         layerDetail = ul_layers.cloneNode() // No need for deep cloning because we don't want text nodes
         layerDetail.id = Math.random(); // Need a unique id
@@ -377,16 +378,15 @@ function getLayerDetails(layerTitle, wrapper) {
         let layerNames = nodeList.map(element => element.querySelector('Title').firstChild.nodeValue);
         fillList(layerDetail, layerNames);
     } else {
-
-        console.log('nay');
-
         layerDetail = document.createElement('ul');
         layerDetail.classList.toggle('capability_detail');
         layerDetail.id = 'layer_detail';
         layerDetail.appendChild(_lyrName);
+        // TO DO:Prepare direct descendants of said layer node as an acordeon list
     }
 
     layerDetail.setAttribute('type','layer_list');
+    layerNode.removeAttribute('id');
 
     return layerDetail;
 }

@@ -344,11 +344,19 @@ caption {
     padding-top: 3px;
     padding-bottom: 3px;
     max-height: max-content;
-    font-size: 1.3rem;
+    cursor: default;
+}
+
+.capability_detail div p {
     font-weight: bold;
     color: aliceblue;
     text-align: center;
-    cursor: default;
+    font-size: 1.3rem;
+    padding-left: 25px;
+    padding-right: 25px;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .capability_detail li[subheader="true"] {
